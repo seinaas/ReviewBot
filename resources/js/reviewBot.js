@@ -2,33 +2,37 @@ const express = require("express");
 const router = express.Router();
 
 router.post("/NL", (req, res) => {
+    return res.send(naturalLanguage(req));
+});
+
+async function naturalLanguage(req) {
   // Imports the Google Cloud client library
   const language = require("@google-cloud/language");
 
   // Instantiates a client
   const client = new language.LanguageServiceClient();
-  const text = "";
-  const body = req.body;
-  // The text to analyze
-  body.array.forEach(element => {
-    text += element.review + ". ";
-  });
 
-  const document = {
-    content: text,
-    type: "PLAIN_TEXT"
-  };
+  const result = req.body;
+  const sentiment = [];
 
-  // Detects the sentiment of the text
-  client
-    .analyzeSentiment({ document: document })
-    .then(results => {
-      const sentiment = results;
-      return res.status(200).json(sentiment);
-    })
-    .catch(err => {
-      return res.send(err);
-    });
-});
+  for (var i = 0; i < result.length; i++) {
+    // The text to analyze
+    const document = {
+      content: result[i].text,
+      type: "PLAIN_TEXT"
+    };
+
+    await client
+      .analyzeSentiment({ document: document })
+      .then(results => {
+            console.log("2");
+            sentiment.push(results[0].documentSentiment);
+      })
+      .catch(err => {
+        return err;
+      });
+  }
+  return sentiment;
+}
 
 module.exports = router;
