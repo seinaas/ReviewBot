@@ -116,12 +116,12 @@ $(document).ready(function () {
 
     function renderPage(locationData) {
         console.log(locationData);
-        if (locationData[0].hasOwnProperty('reviews')) {
+        if (locationData[0].hasOwnProperty("reviews")) {
             let template =
-                "<div class='body-header'><h1>" + locationData[0].title + "</h1>"
+                "<section class='main-body'><div class='body-header'><h1>" + locationData[0].title + "</h1>"
                 + "<h2>" + locationData[0].address + "</h2></div>" +
                 "<canvas id='review-chart'></canvas>" +
-                "<canvas id='ind-ratings-chart'></canvas>";
+                "<canvas id='ind-ratings-chart'></canvas></section>";
 
             $(".main-body").replaceWith(template);
 
@@ -129,7 +129,6 @@ $(document).ready(function () {
             let individualRatings = [0, 0, 0, 0, 0];
 
             for (let i = 0; i < locationData[0].reviews.length; i++) {
-                console.log(locationData[0].reviews[i].stars);
                 switch (locationData[0].reviews[i].stars) {
                     case 1:
                         individualRatings[0]++;
@@ -222,7 +221,7 @@ $(document).ready(function () {
                 }
             });
         } else {
-            $(".main-body").replaceWith("<div class='no-review'><h1>It look like this business doesn't have any reviews yet.</h1>"+
+            $(".main-body").replaceWith("<div class='no-review main-body'><h1>It look like this business doesn't have any reviews yet.</h1>"+
             "<h1>😞<h1></div>");
         }
     }
