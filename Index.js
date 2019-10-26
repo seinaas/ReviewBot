@@ -7,7 +7,6 @@ const bodyParser = require("body-parser");
 //Server info
 const myApp = express();
 const port = 8000;
-const hostname = '127.0.0.1';
 
 //Middleware
 myApp.use(cors());
@@ -17,6 +16,7 @@ myApp.use(bodyParser.json());
 myApp.use('/reviewBot', reviewBot);
 
 //Hosting
-myApp.listen(port, hostname, ()=>{
-  console.log(`Server running at http://${hostname}:${port}/`);
+const server = myApp.listen(port, ()=>{
+  const host = server.address().address;
+  console.log(`Server running at http://${host}:${port}/`);
 })
