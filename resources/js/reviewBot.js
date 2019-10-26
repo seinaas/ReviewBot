@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-router.get("/NL", (req, res) => {
+router.post("/NL", (req, res) => {
   // Imports the Google Cloud client library
   const language = require("@google-cloud/language");
 
@@ -9,7 +9,7 @@ router.get("/NL", (req, res) => {
   const client = new language.LanguageServiceClient();
 
   // The text to analyze
-  const text = "Hello, world!";
+  const text = req.body.text;
 
   const document = {
     content: text,
@@ -20,8 +20,8 @@ router.get("/NL", (req, res) => {
   client
     .analyzeSentiment({ document: document })
     .then(results => {
-      const sentiment = results[0].documentSentiment;
-      return res.status(200).send(`Text: ${text} Sentiment score: ${sentiment.score} Sentiment magnitude: ${sentiment.magnitude}`);
+        const sentiment = results;
+      return res.status(200).json(sentiment);
     })
     .catch(err => {
       return res.send(err);
