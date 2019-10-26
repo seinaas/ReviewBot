@@ -1,26 +1,22 @@
-//const language = require("@google-cloud/language");
-const places = require("@google/maps");
-const port = process.env.PORT;
-async function quickstart() {
-    // Imports the Google Cloud client library
-    const language = require('@google-cloud/language');
-  
-    // Instantiates a client
-    const client = new language.LanguageServiceClient();
-  
-    // The text to analyze
-    const text = 'Hello, world!';
-  
-    const document = {
-      content: text,
-      type: 'PLAIN_TEXT',
-    };
-  
-    // Detects the sentiment of the text
-    const [result] = await client.analyzeSentiment({document: document});
-    const sentiment = result.documentSentiment;
-  
-    console.log(`Text: ${text}`);
-    console.log(`Sentiment score: ${sentiment.score}`);
-    console.log(`Sentiment magnitude: ${sentiment.magnitude}`);
-  }
+//Libraries
+const express = require("express");
+const cors = require("cors");
+const reviewBot = require("./resources/js/reviewBot.js");
+const bodyParser = require("body-parser");
+
+//Server info
+const myApp = express();
+const port = 8000;
+const hostname = '127.0.0.1';
+
+//Middleware
+myApp.use(cors());
+myApp.use(bodyParser.json());
+
+//Routes
+myApp.use('/reviewBot', reviewBot);
+
+//Hosting
+myApp.listen(port, hostname, ()=>{
+  console.log(`Server running at http://${hostname}:${port}/`);
+})
