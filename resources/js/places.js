@@ -1,6 +1,5 @@
 $(document).ready(function () {
     const searchInput = document.getElementById('autocomplete');
-    var locationData;
 
     var options = {
         types: ["establishment"]
@@ -47,16 +46,17 @@ $(document).ready(function () {
 
         // Get the place info from the autocomplete Api
         const place = autocomplete.getPlace();
-        const address = place.name; 
+        const address = place.name;
 
         console.log(place);
-        
-        var fullAddress = address;
-        for (var i=1; i<place.address_components.length; i++) {
+
+        /*var fullAddress = address;
+        for (var i = 1; i < place.address_components.length; i++) {
             fullAddress = fullAddress + ", " + place.address_components[i].long_name
-        }
-        
-        retrieveData(fullAddress);
+        }*/
+
+        //retrieveData(fullAddress);
+        renderPage(null);
 
         //If we can find the place lets go to it
         if (typeof place.address_components !== 'undefined') {
@@ -102,18 +102,31 @@ $(document).ready(function () {
 
         let final = "https://api.apify.com/v2/datasets/" + myJson.data.defaultDatasetId + "/items?format=json&clean=1";
         console.log(final);
-        
-            $.ajax({
-                url: final,
-                type: 'GET',
-                dataType: "json",
-                success: displayAll
-            });
 
-            function displayAll(data) {
-                allData = data;
-                console.log(data);
-            }
-        
+        var reviewResponse = await fetch(final);
+        var reviewJson = await reviewResponse.json();
+        console.log(reviewJson);
+
+        while (reviewJson.length == 0) {
+            reviewResponse = await fetch(final);
+            reviewJson = await reviewResponse.json();
+        }
+        renderPage(reviewJson);
+
+    }
+
+    function renderPage(locationData) {
+        //console.log(locationData);
+        var canv = document.getElementById("overall-rating");
+        var ctx = canv.getContext("2d");
+        ctx.beginPath();
+        ctx.arc(400, 100, 50, 1.5*Math.PI, locationData[0].totalScore/5*2*Math.PI);
+        ctx.stroke();
+
+        /*var template =
+            "<div class='body-header'><h1>" + locationData[0].title + "</h1>"
+            + "<h2>" + locationData[0].address + "</h2></div>"*/
+
+        $(".main-body").replaceWith(template);
     }
 });
