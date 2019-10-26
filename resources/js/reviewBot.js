@@ -7,9 +7,12 @@ router.post("/NL", (req, res) => {
 
   // Instantiates a client
   const client = new language.LanguageServiceClient();
-
+  const text = "";
+  const body = req.body;
   // The text to analyze
-  const text = req.body.text;
+  body.array.forEach(element => {
+    text += element.review + ". ";
+  });
 
   const document = {
     content: text,
@@ -20,13 +23,12 @@ router.post("/NL", (req, res) => {
   client
     .analyzeSentiment({ document: document })
     .then(results => {
-        const sentiment = results;
+      const sentiment = results;
       return res.status(200).json(sentiment);
     })
     .catch(err => {
       return res.send(err);
     });
-
 });
 
 module.exports = router;
