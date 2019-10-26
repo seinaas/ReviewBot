@@ -5,14 +5,13 @@
     <link rel="stylesheet" href="resources/css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,500,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="vendors/css/materialize.css" media="screen,projection"1/>
+    <link type="text/css" rel="stylesheet" href="vendors/css/materialize.css" media="screen,projection" 1 />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
 
     <script src="vendors/js/jquery-3.4.1.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="vendors/js/canvasjs.min.js"></script>
-    <script src="vendors/js/jquery.canvasjs.min.js"></script>
 </head>
 
 <body>
@@ -28,34 +27,29 @@
         </nav>
     </div>
     <section class="main-body">
-        <!--<div class="empty-text">
+        <div class="empty-text">
             
             <h1>Welcome to Review Bot.</h1>
             <h1>Search a place to get started.</h1>
             
             
-        </div>-->
+        </div>
         <!--Template for JS-->
+        <!--
         <div class="body-header">
             <h1>Title</h1>
             <h2>Address</h2>
 
-            <canvas id="#overall-rating" width="200" height="200"></canvas>
-        </div>
-        
-        <div class="review-cards">
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
-        </div>
+            <canvas id="review-chart"></canvas>
+            <canvas id="ind-ratings-chart"></canvas>
+        </div>-->
+
     </section>
 
+    <script type="text/javascript" src="vendors/js/Chart.bundle.js"></script>
     <script type="text/javascript" src="vendors/js/materialize.js"></script>
-    <script type="text/javascript"
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7IuyrrfwfgSX3-RTJZW4fRAwa_hepuZ0&libraries=places"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7IuyrrfwfgSX3-RTJZW4fRAwa_hepuZ0&libraries=places"></script>
+    <script type="text/javascript" src="resources/js/chartSetups.js"></script>
     <script type="text/javascript" src="resources/js/places.js"></script>
 </body>
 
