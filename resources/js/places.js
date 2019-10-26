@@ -50,13 +50,13 @@ $(document).ready(function () {
 
         console.log(place);
 
-        /*var fullAddress = address;
+        var fullAddress = address;
         for (var i = 1; i < place.address_components.length; i++) {
             fullAddress = fullAddress + ", " + place.address_components[i].long_name
-        }*/
+        }
 
-        //retrieveData(fullAddress);
-        renderPage(null);
+        retrieveData(fullAddress);
+        //renderPage(null);
 
         //If we can find the place lets go to it
         if (typeof place.address_components !== 'undefined') {
@@ -71,7 +71,7 @@ $(document).ready(function () {
     async function retrieveData(address) {
         console.log(address);
         var myJson;
-        var allData = [];
+
         data = {
             searchString: address,
             proxyConfig: {
@@ -105,7 +105,6 @@ $(document).ready(function () {
 
         var reviewResponse = await fetch(final);
         var reviewJson = await reviewResponse.json();
-        console.log(reviewJson);
 
         while (reviewJson.length == 0) {
             reviewResponse = await fetch(final);
@@ -116,17 +115,115 @@ $(document).ready(function () {
     }
 
     function renderPage(locationData) {
-        //console.log(locationData);
-        var canv = document.getElementById("overall-rating");
-        var ctx = canv.getContext("2d");
-        ctx.beginPath();
-        ctx.arc(400, 100, 50, 1.5*Math.PI, locationData[0].totalScore/5*2*Math.PI);
-        ctx.stroke();
+        console.log(locationData);
+        if (locationData[0].hasOwnProperty('reviews')) {
+            let template =
+                "<div class='body-header'><h1>" + locationData[0].title + "</h1>"
+                + "<h2>" + locationData[0].address + "</h2></div>" +
+                "<canvas id='review-chart'></canvas>" +
+                "<canvas id='ind-ratings-chart'></canvas>";
 
-        /*var template =
-            "<div class='body-header'><h1>" + locationData[0].title + "</h1>"
-            + "<h2>" + locationData[0].address + "</h2></div>"*/
+            $(".main-body").replaceWith(template);
 
-        $(".main-body").replaceWith(template);
+            let score = locationData[0].totalScore;//3.5;
+            let individualRatings = [0, 0, 0, 0, 0];
+
+            for (let i = 0; i < locationData[0].reviews.length; i++) {
+                console.log(locationData[0].reviews[i].stars);
+                switch (locationData[0].reviews[i].stars) {
+                    case 1:
+                        individualRatings[0]++;
+                        break;
+                    case 2:
+                        individualRatings[1]++;
+                        break;
+                    case 3:
+                        individualRatings[2]++;
+                        break;
+                    case 4:
+                        individualRatings[3]++;
+                        break;
+                    case 5:
+                        individualRatings[4]++;
+                        break;
+                }
+            }
+
+            Chart.defaults.global.animation.duration = 1000;
+
+            //CREATES DOUGHNUT CHART TO DISPLAY OVERALL RATINGS
+            var ctx = $('#review-chart');
+            var overallChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [score, 5 - score],
+                        backgroundColor: [
+                            'rgba(255,215,0,0.9)',
+                            'rgba(230,230,230,0.3)',
+                        ],
+                    }],
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    tooltips: { enabled: false },
+                    hover: { mode: null },
+                    cutoutPercentage: 60,
+                    elements: {
+                        arc: {
+                            borderWidth: 0
+                        },
+                        center: {
+                            text: score + "/5",
+                            color: 'white', //Default black
+                            fontStyle: 'Roboto', //Default Arial
+                            sidePadding: 25 //Default 20 (as a percentage)
+                        }
+                    },
+                }
+            });
+
+            //CREATES BAR CHART TO DISPLAY INDIVIDUAL STAR RATINGS
+            ctx = $("#ind-ratings-chart");
+            var individualChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ["1", "2", "3", "4", "5"],
+                    datasets: [{
+                        backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+                        data: individualRatings,
+                    }],
+                },
+                beginAtZero: true,
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: "All ratings",
+                        fontColor: "white",
+                        fontFamily: "Roboto",
+                        fontSize: 18,
+                    },
+                    scales: {
+                        xAxes: [{
+                            gridLines: { color: "white" },
+                            ticks: { fontSize: 18, fontColor: "white" },
+                        }],
+                        yAxes: [{
+                            gridLines: { color: "white" },
+                            ticks: {
+                                fontSize: 18, fontColor: "white", beginAtZero: true, callback: function (value) { if (Number.isInteger(value)) { return value; } },
+                                stepSize: 1
+                            },
+                        }]
+                    }
+                }
+            });
+        } else {
+            $(".main-body").replaceWith("<div class='no-review'><h1>It look like this business doesn't have any reviews yet.</h1>"+
+            "<h1>😞<h1></div>");
+        }
     }
 });
