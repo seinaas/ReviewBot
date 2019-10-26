@@ -1,34 +1,58 @@
 const express = require("express");
 const router = express.Router();
 
-router.post("/NL", (req, res) => {
-  // Imports the Google Cloud client library
-  const language = require("@google-cloud/language");
+// Imports the Google Cloud client library
+const language = require("@google-cloud/language");
+// Instantiates a client
+const client = new language.LanguageServiceClient();
 
-  // Instantiates a client
-  const client = new language.LanguageServiceClient();
-  const text = "";
-  const body = req.body;
-  // The text to analyze
-  body.array.forEach(element => {
-    text += element.review + ". ";
+router.post("/sentiment", (req, res) => {
+
+  const result = req.body;
+  const sentiment = [];
+  const response = [];
+
+  for (var i = 0; i < result.length; i++) {
+    // The text to analyze
+    const document = {
+      content: result[i].text,
+      type: "PLAIN_TEXT"
+    };
+
+    sentiment.push(client.analyzeSentiment({ document: document }));
+  }
+
+  Promise.all(sentiment).then(results => {
+    for (var i = 0; i < results.length; i++) {
+      response.push(results[i][0].documentSentiment);
+    }
+    return res.status(200).send(response);
   });
+});
 
-  const document = {
-    content: text,
-    type: "PLAIN_TEXT"
-  };
 
-  // Detects the sentiment of the text
-  client
-    .analyzeSentiment({ document: document })
-    .then(results => {
-      const sentiment = results;
-      return res.status(200).json(sentiment);
-    })
-    .catch(err => {
-      return res.send(err);
-    });
+//Analyze entities
+router.post("/entities", (req, res) => {
+  const result = req.body;
+  const sentiment = [];
+  const response = [];
+
+  for (var i = 0; i < result.length; i++) {
+    // The text to analyze
+    const document = {
+      content: result[i].text,
+      type: "PLAIN_TEXT"
+    };
+
+    sentiment.push(client.analyzeEntities({ document: document }));
+  }
+
+  Promise.all(sentiment).then(results => {
+    for (var i = 0; i < results.length; i++) {
+      response.push(results[i][0].documentSentiment);
+    }
+    return res.status(200).send(response);
+  });
 });
 
 module.exports = router;
