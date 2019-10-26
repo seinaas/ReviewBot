@@ -113,6 +113,7 @@ $(document).ready(function () {
         renderPage(reviewJson);
 
     }
+    
 
     function renderPage(locationData) {
         console.log(locationData);
