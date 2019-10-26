@@ -11,22 +11,69 @@ body {
     background-color: #000072;
 }
 
-.brand-logo {
-    margin: 6px 30px; 
+.logo {
+    position: absolute;
+    font-size: 200%;
+    left: 0;
+    margin: 6px 30px;
 }
 
-.searchbar {
+.search-form {
     position: absolute;
     height: 80px;
     width: 300px !important;
     left: 50%;
-    top: 15px;
-    padding: 0 50px !important;
+    top: 10px;
     transform: translate(-50%);
-    border: 2px solid white !important;
-    border-radius: 99999px !important;
+}
 
+input.searchbar {
+    height: 100%;
+    width: 100% !important;
+    padding: 0 50px !important;
+    border: 2px solid white !important;
+    border-radius: 15px !important;
     color: white;
+
+    transition: color 0.2s, background-color 0.2s !important;
+}
+
+.search-label {
+    position: absolute;
+    margin-top: -64px;
+    margin-left: 15px;
+    color: white;
+
+    transition: color 0.2s;
+}
+
+.search-form:hover .searchbar,
+.search-form .searchbar:focus {
+    background-color: rgba(255,255,255,1) !important;
+    color: #000072 !important;
+}
+
+.search-form:hover .search-label,
+.searchbar:focus + .search-label {
+    color: #000072 !important;
+}
+
+.pac-container {
+    box-sizing: border-box;
+    padding: 10px;
+    margin-top: -14px;
+    width: 404px !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 0 15px 15px !important;
+}
+
+.pac-item {
+    padding: 0 4px;
+}
+
+.pac-item:hover {
+    cursor: pointer;
 }
 
 .empty-text {
