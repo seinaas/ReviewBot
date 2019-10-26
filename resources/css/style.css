@@ -1,0 +1,43 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #000061;
+}
+
+.nav-bar {
+    height: 80px;
+}
+
+.nav-wrapper {
+    background-color: #000072;
+}
+
+.brand-logo {
+    margin: 6px 30px; 
+}
+
+.searchbar {
+    position: absolute;
+    height: 80px;
+    width: 300px !important;
+    left: 50%;
+    top: 15px;
+    padding: 0 50px !important;
+    transform: translate(-50%);
+    border: 2px solid white !important;
+    border-radius: 99999px !important;
+
+    color: white;
+}
+
+.empty-text {
+    color: rgb(231, 225, 225);
+    opacity: 0.4;
+    margin-left: 50px;
+    margin-top: 240px;
+}
+
+.empty-text h1 {
+    font-size: 600%;
+    margin: 0;
+    text-align: center;
+}
