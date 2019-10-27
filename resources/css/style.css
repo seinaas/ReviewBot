@@ -5,7 +5,7 @@ body {
 }
 
 .empty-text {
-    opacity: 0.4;
+    opacity: 0.8;
     margin-left: 50px;
     margin-top: 240px;
 }
@@ -41,9 +41,15 @@ body {
 
 .logo {
     position: absolute;
-    font-size: 200%;
+    height: 55px;
+    width: 55px;
     left: 0;
-    margin: 6px 30px;
+    margin: 12px 30px;
+}
+
+.logo img {
+    height: 100%;
+    width: 100%;
 }
 
 .search-form {
@@ -143,5 +149,5 @@ input.searchbar {
     top: 500px;
     right: 60px;
     max-width: 500px;
-    max-height: 400px !important;
+    max-height: 600px;
 }
