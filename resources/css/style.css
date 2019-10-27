@@ -190,7 +190,6 @@ input.searchbar {
     padding: 40px;
     overflow-x: scroll;
     overflow-y: hidden;
-    white-space: nowrap;
 }
 
 .body-header h1,
