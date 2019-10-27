@@ -41,9 +41,15 @@ body {
 
 .logo {
     position: absolute;
-    font-size: 200%;
+    height: 55px;
+    width: 55px;
     left: 0;
-    margin: 6px 30px;
+    margin: 12px 30px;
+}
+
+.logo img {
+    height: 100%;
+    width: 100%;
 }
 
 .search-form {

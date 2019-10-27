@@ -110,6 +110,8 @@ $(document).ready(function () {
             reviewResponse = await fetch(final);
             reviewJson = await reviewResponse.json();
         }
+
+        postSentiment(reviewJson);
         renderPage(reviewJson);
 
     }
@@ -226,4 +228,14 @@ $(document).ready(function () {
             "<h1>😞<h1></div>");
         }
     }
+
+    function postSentiment(dataJson) {
+        $.post(
+            "http://localhost:8000/reviewBot/sentiment",
+            dataJson,
+            function(data, status) {
+                console.log('${data} and status is ${status}');
+            }
+        )
+    } 
 });
