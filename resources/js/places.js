@@ -1,6 +1,6 @@
 $(document).ready(function () {
     const searchInput = document.getElementById('autocomplete');
-    const loadingPhrases = ["Mining Cryptocurrency", "A Couple Bits Tried to Escape, but we Caught Them", "Our Servers are Powered by a Lemon and Two Electrodes", "Testing your Patience", "Hitting a Sick Aerial", "Dreaming of Faster Computers", "Collecting your Data"];
+    const loadingPhrases = ["Mining Cryptocurrency", "Looking for the Cat", "Powering up Servers", "Testing your Patience", "Hitting a Sick Aerial", "Dreaming of Faster Computers", "Collecting your Data", "Booting Up", "Powering Blasters", "Charging Batteries", "Baking...", "Restarting Router", "Downloading RAM", "Can we sleep yet?", "Pushing Buttons", "while(true) load();", "Running Functions", "Calling the IT guy"];
     var resultSentiment;
     var interval
     var options = {
@@ -8,7 +8,9 @@ $(document).ready(function () {
     };
     var autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'), options);
 
-
+    $(".logo").click(function(){
+        $(".main-body").html("<div class='empty-text'><h1>Welcome to Review Bot.</h1><h1>Search a place to get started.</h1></div>");
+    })
 
     // Listener outside to stop nested loop returning odd results
     searchInput.addEventListener('keydown', (e) => {
@@ -317,11 +319,11 @@ $(document).ready(function () {
 
     function sentimentChart(reviews) {
         var pointsScatter = [];
-        var pointsLine = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        var pointsLine = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         for (var i = 0; i < reviews.length; i++) {
             pointsScatter.push({ x: reviews[i].magnitude, y: reviews[i].score });
         }
-        for (var i = 0; i <= 10; i++) {
+        for (var i = -10; i <= 10; i++) {
             for (var j = 0; j < reviews.length; j++) {
                 if ((Math.round(reviews[j].score * 10) / 10) == (i / 10)) {
                     pointsLine[i]++;
@@ -383,7 +385,7 @@ $(document).ready(function () {
         var scoreChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0"],
+                labels: ["-1.0","-0.8","-0.6","-0.4","-0.2","0.0","0.2", "0.4", "0.6", "0.8", "1.0"],
                 datasets: [
                     {
                         data: pointsLine,
@@ -410,7 +412,7 @@ $(document).ready(function () {
                             display: true,
                             labelString: "Score",
                             fontColor: "#000072",
-                            maxTicksLimit: 20,
+                            maxTicksLimit: 11,
                         },
                         gridLines: { color: "#000072" },
                         ticks: { fontColor: "#000072" },
