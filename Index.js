@@ -8,9 +8,11 @@ const bodyParser = require("body-parser");
 const myApp = express();
 const port = 8000;
 
+
 //Middleware
 myApp.use(cors());
-myApp.use(bodyParser.json());
+myApp.use(bodyParser.json({limit: '50mb'}));
+myApp.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 //Routes
 myApp.use('/reviewBot', reviewBot);

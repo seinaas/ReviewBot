@@ -1,6 +1,6 @@
 $(document).ready(function () {
     const searchInput = document.getElementById('autocomplete');
-    const loadingPhrases = ["Mining Cryptocurrency", "A Couple Bits Tried to Escape, but we Caught Them", "At Least we Didn't Leave you on Read", "Our Servers are Powered by a Lemon and Two Electrodes", "Testing your Patience", "Hitting a Sick Aerial", "Dreaming of Faster Computers", "Farming for XP"];
+    const loadingPhrases = ["Mining Cryptocurrency", "A Couple Bits Tried to Escape, but we Caught Them", "Our Servers are Powered by a Lemon and Two Electrodes", "Testing your Patience", "Hitting a Sick Aerial", "Dreaming of Faster Computers", "Collecting your Data"];
     var resultSentiment;
     var interval
     var options = {
@@ -129,7 +129,7 @@ $(document).ready(function () {
                 "<div class='body-header'><h1>" + locationData[0].title + "</h1>"
                 + "<h2>" + locationData[0].address + "</h2></div>" +
                 "<canvas id='review-chart'></canvas>" +
-                "<div class='my-card'><canvas id='ind-ratings-chart'></canvas></div>";
+                "<div class='double-card'><div class='card-left'><div class='best-review'></div><div class='worst-review'></div></div><div class='card-right'><canvas id='ind-ratings-chart'></canvas></div></div>";
 
             $(".main-body").html(template);
 
@@ -242,7 +242,8 @@ $(document).ready(function () {
             contentType: "application/json",
             data: JSON.stringify(dataJson[0].reviews),
             success: function (result) {
-                sentimentGraph(result);
+                console.log(result);
+                sentimentTable(result);
             },
             error: function (error) {
 
@@ -260,7 +261,38 @@ $(document).ready(function () {
         $("#autocomplete").attr("disabled", "disabled");
     }
 
-    function sentimentGraph(result) {
+    function sentimentTable(result) {
+        var bestId=0, worstId = 0;
+        var maxMagnitudeGood = 0, maxScore = 0, minScore = 0, maxMagnitudeBad = 0;
+        for (var i = 0; i < result.length; i++){
+            //BEST
+            if (result[i].score>maxScore) {
+                maxScore = result[i].score;
+                maxMagnitudeGood = result[i].magnitude;
+                bestId = i;
+            } else if (result[i].score == maxScore) {
+                if (result[i].magnitude > maxMagnitudeGood) {
+                    maxMagnitudeGood = result[i].magnitude;
+                    bestId = i;
+                }
+            }
 
+            //WORST
+            if (result[i].score < minScore) {
+                minScore = result[i].score;
+                minMagnitudeBad = result[i].magnitude;
+                worstId = i;
+            } else if (result[i].score == minScore) {
+                if (result[i].magnitude > maxMagnitudeBad) {
+                    maxMagnitudeBad = result[i].magnitude;
+                    worstId = i;
+                }
+            }
+        }
+        
+        console.log(result[bestId].text);
+        $(".card-left").html("<div class='best-review'></div><div class='worst-review'></div>")
+        $(".best-review").html("</span><h3>Best Review:</h3><p>"+result[bestId].text+"</p></span>");
+        $(".worst-review").html("</span><h3>Worst Review</h3><p>"+result[worstId].text+"</p></span>");
     }
 });
