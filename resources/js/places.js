@@ -1,7 +1,8 @@
 $(document).ready(function () {
     const searchInput = document.getElementById('autocomplete');
-    const loadingPhrases = ["Mining Cryptocurrency", "A Couple Bits Tried to Escape, but we Caught Them", "Go Ahead, Hold Your Breath", "At Least we Didn't Leave you on Read", "Our Servers are Powered by a Lemon and Two Electrodes", "Testing your Patience", "Hitting a Sick Aerial", "Dreaming of Faster Computers", "Farming for XP"];
+    const loadingPhrases = ["Mining Cryptocurrency", "A Couple Bits Tried to Escape, but we Caught Them", "At Least we Didn't Leave you on Read", "Our Servers are Powered by a Lemon and Two Electrodes", "Testing your Patience", "Hitting a Sick Aerial", "Dreaming of Faster Computers", "Farming for XP"];
     var resultSentiment;
+    var interval
     var options = {
         types: ["establishment"]
     };
@@ -120,6 +121,7 @@ $(document).ready(function () {
 
 
     function renderPage(locationData) {
+        clearInterval(interval);
         $("#autocomplete").removeAttr("disabled");
         console.log(locationData);
         if (locationData[0].hasOwnProperty("reviews")) {
@@ -249,12 +251,13 @@ $(document).ready(function () {
     }
 
     function startLoading() {
-        let message;
-        const interval = setInterval(function () {
-            message = loadingPhrases[Math.floor(Math.random()*loadingPhrases.length)];
+        let message = loadingPhrases[Math.floor(Math.random() * loadingPhrases.length)];
+        $('.main-body').html("<div class='loading-logo'><img src='resources/img/logo.png'/></div><h2>" + message + "</h2>")
+        interval = setInterval(function () {
+            message = loadingPhrases[Math.floor(Math.random() * loadingPhrases.length)];
+            $('.main-body').html("<div class='loading-logo'><img src='resources/img/logo.png'/></div><h2>" + message + "</h2>")
         }, 5000);
         $("#autocomplete").attr("disabled", "disabled");
-        $('.main-body').html("<div class='loading-logo'><img src='resources/img/logo.png'/><h2>" + message + "</h2></div>")
     }
 
     function sentimentGraph(result) {
