@@ -18,7 +18,8 @@ const brocheAfoin = [];
       // The text to analyze
       const document = {
         content: result[i].text,
-        type: "PLAIN_TEXT"
+        type: "PLAIN_TEXT",
+        language: "en"
       };
       brocheAfoin.push(result[i].text);
       sentiment.push(client.analyzeSentiment({ document: document }));
