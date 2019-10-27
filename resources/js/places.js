@@ -230,12 +230,18 @@ $(document).ready(function () {
     }
 
     function postSentiment(dataJson) {
-        $.post(
-            "http://localhost:8000/reviewBot/sentiment",
-            dataJson,
-            function(data, status) {
-                console.log('${data} and status is ${status}');
-            }
-        )
+        $.ajax({
+            type : "POST",
+            url : "http://localhost:8000/reviewBot/sentiment",
+            datatype : "application/json",
+            contentType: "application/json",
+            data: JSON.stringify(dataJson[0].reviews),
+            success : function(result) {
+                console.log(result);
+            },
+            error : function(error) {
+        
+            },
+        });
     } 
 });
