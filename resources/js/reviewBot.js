@@ -7,10 +7,11 @@ const language = require("@google-cloud/language");
 const client = new language.LanguageServiceClient();
 
 router.post("/sentiment", (req, res) => {
-  console.log(req.body);
+
   const result = req.body;
   const sentiment = [];
   const response = [];
+const brocheAfoin = [];
 
   for (var i = 0; i < result.length; i++) {
     if (result[i].text != undefined) {
@@ -19,14 +20,14 @@ router.post("/sentiment", (req, res) => {
         content: result[i].text,
         type: "PLAIN_TEXT"
       };
-
+      brocheAfoin.push(result[i].text);
       sentiment.push(client.analyzeSentiment({ document: document }));
     }
   }
 
   Promise.all(sentiment).then(results => {
     for (var i = 0; i < results.length; i++) {
-      response.push(results[i][0].documentSentiment);
+      response.push({"text": brocheAfoin[i],"magnitude": results[i][0].documentSentiment.magnitude, "score":results[i][0].documentSentiment.score});
     }
     console.log(response);
     return res.status(200).send(response);
