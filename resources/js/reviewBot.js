@@ -7,29 +7,31 @@ const language = require("@google-cloud/language");
 const client = new language.LanguageServiceClient();
 
 router.post("/sentiment", (req, res) => {
-
+  console.log(req.body);
   const result = req.body;
   const sentiment = [];
   const response = [];
 
   for (var i = 0; i < result.length; i++) {
-    // The text to analyze
-    const document = {
-      content: result[i].text,
-      type: "PLAIN_TEXT"
-    };
+    if (result[i].text != undefined) {
+      // The text to analyze
+      const document = {
+        content: result[i].text,
+        type: "PLAIN_TEXT"
+      };
 
-    sentiment.push(client.analyzeSentiment({ document: document }));
+      sentiment.push(client.analyzeSentiment({ document: document }));
+    }
   }
 
   Promise.all(sentiment).then(results => {
     for (var i = 0; i < results.length; i++) {
       response.push(results[i][0].documentSentiment);
     }
+    console.log(response);
     return res.status(200).send(response);
   });
 });
-
 
 //Analyze entities
 router.post("/entities", (req, res) => {
