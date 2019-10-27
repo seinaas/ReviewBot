@@ -70,7 +70,7 @@ $(document).ready(function () {
     });
 
     //SEND HTTP POST REQUEST TO RETRIEVE LOCATION DATA
-    const Url = "https://api.apify.com/v2/actor-tasks/3TyaFufB3FNuH5HkL/runs?token=qPBKQ79Ssk7xqDvLD935roRef&ui=1";
+    const Url = "https://api.apify.com/v2/actor-tasks/YuuiNMbYsGgY8odbj/runs?token=75dppykcMPqQZa674rPTZfLRR&ui=1";
     async function retrieveData(address) {
         console.log(address);
         var myJson;
@@ -129,9 +129,12 @@ $(document).ready(function () {
                 "<div class='body-header'><h1>" + locationData[0].title + "</h1>"
                 + "<h2>" + locationData[0].address + "</h2></div>" +
                 "<canvas id='review-chart'></canvas>" +
-                "<div class='double-card'><div class='card-left'><div class='best-review'></div><div class='worst-review'></div></div><div class='card-right'><canvas id='ind-ratings-chart'></canvas></div></div>";
+                "<div class='double-card'><div class='card-left'><div class='best-review'></div><div class='worst-review'></div></div><div class='card-right'><div class='total-reviews'><h3>" + locationData[0].title + " has</h3><h1>" + locationData[0].reviews.length + "</h1><h4>total review(s)</h4></div><div><canvas id='ind-ratings-chart'></canvas></div><div><canvas id='score-magnitude-chart'></canvas></div><div><canvas id='score-chart'></canvas></div></div></div>";
 
             $(".main-body").html(template);
+            $(".card-right").slick();
+            $(".slick-prev").html("<i class='material-icons'>keyboard_arrow_left</i>");
+            $(".slick-next").html("<i class='material-icons'>keyboard_arrow_right</i>");
 
             let score = locationData[0].totalScore;//3.5;
             let individualRatings = [0, 0, 0, 0, 0];
@@ -215,13 +218,24 @@ $(document).ready(function () {
                     },
                     scales: {
                         xAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: "User Rating",
+                                fontColor: "#000072",
+                            },
                             gridLines: { color: "#000072" },
                             ticks: { fontSize: 18, fontColor: "#000072" },
                         }],
                         yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Nb of Reviews",
+                                fontColor: "#000072",
+                                padding: 2,
+                            },
                             gridLines: { color: "#000072" },
                             ticks: {
-                                fontSize: 18, fontColor: "#000072", beginAtZero: true, callback: function (value) { if (Number.isInteger(value)) { return value; } },
+                                fontSize: 12, fontColor: "#000072", maxTicksLimit: 8, beginAtZero: true, callback: function (value) { if (Number.isInteger(value)) { return value; } },
                                 stepSize: 1
                             },
                         }]
@@ -242,8 +256,8 @@ $(document).ready(function () {
             contentType: "application/json",
             data: JSON.stringify(dataJson[0].reviews),
             success: function (result) {
-                console.log(result);
                 sentimentTable(result);
+                sentimentChart(result);
             },
             error: function (error) {
 
@@ -262,11 +276,11 @@ $(document).ready(function () {
     }
 
     function sentimentTable(result) {
-        var bestId=0, worstId = 0;
+        var bestId = 0, worstId = 0;
         var maxMagnitudeGood = 0, maxScore = 0, minScore = 0, maxMagnitudeBad = 0;
-        for (var i = 0; i < result.length; i++){
+        for (var i = 0; i < result.length; i++) {
             //BEST
-            if (result[i].score>maxScore) {
+            if (result[i].score > maxScore) {
                 maxScore = result[i].score;
                 maxMagnitudeGood = result[i].magnitude;
                 bestId = i;
@@ -289,10 +303,132 @@ $(document).ready(function () {
                 }
             }
         }
-        
-        console.log(result[bestId].text);
-        $(".card-left").html("<div class='best-review'></div><div class='worst-review'></div>")
-        $(".best-review").html("</span><h3>Best Review:</h3><p>"+result[bestId].text+"</p></span>");
-        $(".worst-review").html("</span><h3>Worst Review</h3><p>"+result[worstId].text+"</p></span>");
+
+        console.log(result[bestId]);
+        let best, worst;
+        if (typeof result[bestId] === "undefined") {
+            $(".card-left").html("<h1 class='no-written-reviews'>This place doesn't seem to have any written reviews yet</h1>");
+        } else {
+            $(".card-left").html("<div class='best-review'></div><div class='worst-review'></div>")
+            $(".best-review").html("</span><h3>Best Review:</h3><p>" + result[bestId].text + "</p></span>");
+            $(".worst-review").html("</span><h3>Worst Review</h3><p>" + result[worstId].text + "</p></span>");
+        }
+    }
+
+    function sentimentChart(reviews) {
+        var pointsScatter = [];
+        var pointsLine = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        for (var i = 0; i < reviews.length; i++) {
+            pointsScatter.push({ x: reviews[i].magnitude, y: reviews[i].score });
+        }
+        for (var i = 0; i <= 10; i++) {
+            for (var j = 0; j < reviews.length; j++) {
+                if ((Math.round(reviews[j].score * 10) / 10) == (i / 10)) {
+                    pointsLine[i]++;
+                }
+            }
+        }
+
+        //CREATES SCATTER CHART TO DISPLAY SCORE AND MAGNITUDE OF RATINGS
+        ctx = $("#score-magnitude-chart");
+        var scoreMagChart = new Chart(ctx, {
+            type: 'scatter',
+            data: {
+                datasets: [
+                    {
+                        data: pointsScatter,
+                    }
+                ],
+            },
+            options: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: "Score/Magnitude Dataset",
+                    fontColor: "#000072",
+                    fontFamily: "Roboto",
+                    fontSize: 18,
+                },
+                scales: {
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Magnitude",
+                            fontColor: "#000072",
+                        },
+                        gridLines: { color: "#000072" },
+                        ticks: { fontColor: "#000072" },
+                    }],
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Score",
+                            fontColor: "#000072",
+                            padding: 2,
+                        },
+                        gridLines: { color: "#000072" },
+                        ticks: {
+                            fontSize: 12, fontColor: "#000072",
+                        },
+                    }]
+                }
+            }
+
+        });
+
+        console.log(pointsLine);
+
+        //CREATES LINE CHART TO DISPLAY SCORE OCCURRENCES
+        ctx = $('#score-chart');
+        var scoreChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0"],
+                datasets: [
+                    {
+                        data: pointsLine,
+                        backgroundColor: "#34d2eb",
+                        borderColor: "#34d2eb",
+                        pointBackgroundColor: "#53d9ee",
+                        pointHoverBackgroundColor: "#81e3f3",
+                        fill: false,
+                    }
+                ],
+            },
+            options: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: "Score Occurrences",
+                    fontColor: "#000072",
+                    fontFamily: "Roboto",
+                    fontSize: 18,
+                },
+                scales: {
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Score",
+                            fontColor: "#000072",
+                            maxTicksLimit: 20,
+                        },
+                        gridLines: { color: "#000072" },
+                        ticks: { fontColor: "#000072" },
+                    }],
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Nb of occurrences",
+                            fontColor: "#000072",
+                            padding: 2,
+                        },
+                        gridLines: { color: "#000072" },
+                        ticks: {
+                            fontColor: "#000072",
+                        },
+                    }]
+                },
+            }
+        })
     }
 });

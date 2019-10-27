@@ -15,6 +15,26 @@ body {
     margin: 0;
     text-align: center;
 }
+/*SCROLLBAR*/
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
 
 /*LOADING SCREEN*/
 .loading-logo {
@@ -167,7 +187,10 @@ input.searchbar {
     height: 260px;
     margin-left: 50px;
     margin-top: 50px;
-    padding: 0;
+    padding: 40px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
 }
 
 .body-header h1,
@@ -196,13 +219,12 @@ input.searchbar {
 
 #ind-ratings-chart {
     display: inline-block;
-    margin-top: 10px;
+    margin: auto;
     position: relative;
 }
 
 .double-card {
     display: flex;
-    overflow: hidden;
     height: 350px;
     width: 80vw;
     padding: 25px;
@@ -232,16 +254,22 @@ input.searchbar {
     font-size: 150%;
 }
 
-.card-right {
-    position: relative;
-    flex: 1 1 auto;
-    box-sizing: border-box;
-    max-width: 50%;
-    height: 100%;
-    border-left: 1px solid rgb(216, 216, 216);
+.no-text-reviews {
+    margin: 0;
+    margin-left: -10px;
+    position: absolute;
+    width: 100%;
+    font-size: 200%;
+    text-align: center;
+    color: #000072;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
 }
 
 .best-review {
+    height: 50%;
+    box-sizing: border-box;
     flex: 1 1 auto;
     font-size: 120%;
     border-bottom: 1px solid rgb(209, 209, 209);
@@ -250,8 +278,76 @@ input.searchbar {
 }
 
 .worst-review {
-    flex: 1 1 auto;
+    height: 50%;
+    box-sizing: border-box;
+    flex: 0 0 auto;
     font-size: 120%;
     overflow-y: auto;
     padding: 10px;
+}
+
+.card-right {
+    position: relative;
+    padding: 10px;
+    padding-left: 20px;
+    flex: 0 0 auto;
+    box-sizing: border-box;
+    max-width: 50%;
+    height: 100%;
+    border-left: 1px solid rgb(216, 216, 216);
+}
+
+.total-reviews {
+    position: relative;
+    color: #000072;
+    height: 300px !important;
+}
+
+.total-reviews h1,
+.total-reviews h3,
+.total-reviews h4 {
+    margin: 0;
+}
+
+.total-reviews h1 {
+    font-weight: 700;
+    font-size: 800%;
+    position: absolute;
+    left:50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.total-reviews h3 {
+    font-size: 240%;
+}
+
+.total-reviews h4 {
+    font-size: 140%;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+}
+
+.card-right .slick-prev,
+.card-right .slick-next {
+    width: 48px;
+    height: 48px;
+    border: none;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.4);
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    z-index: 99999;
+    color: #000072;
+}
+
+.card-right .slick-prev {
+    left: -30px;
+}
+
+.card-right .slick-next {
+    right: -48px;
 }
