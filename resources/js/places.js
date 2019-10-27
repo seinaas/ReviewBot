@@ -55,6 +55,7 @@ $(document).ready(function () {
             fullAddress = fullAddress + ", " + place.address_components[i].long_name
         }
 
+        startLoading();
         retrieveData(fullAddress);
         //renderPage(null);
 
@@ -118,15 +119,16 @@ $(document).ready(function () {
     
 
     function renderPage(locationData) {
+        $("#autocomplete").removeAttr("disabled");
         console.log(locationData);
         if (locationData[0].hasOwnProperty("reviews")) {
             let template =
-                "<section class='main-body'><div class='body-header'><h1>" + locationData[0].title + "</h1>"
+                "<div class='body-header'><h1>" + locationData[0].title + "</h1>"
                 + "<h2>" + locationData[0].address + "</h2></div>" +
                 "<canvas id='review-chart'></canvas>" +
-                "<canvas id='ind-ratings-chart'></canvas></section>";
+                "<canvas id='ind-ratings-chart'></canvas>";
 
-            $(".main-body").replaceWith(template);
+            $(".main-body").html(template);
 
             let score = locationData[0].totalScore;//3.5;
             let individualRatings = [0, 0, 0, 0, 0];
@@ -224,7 +226,7 @@ $(document).ready(function () {
                 }
             });
         } else {
-            $(".main-body").replaceWith("<div class='no-review main-body'><h1>It look like this business doesn't have any reviews yet.</h1>"+
+            $(".main-body").html("<div class='no-review main-body'><h1>It look like this business doesn't have any reviews yet.</h1>"+
             "<h1>😞<h1></div>");
         }
     }
@@ -238,4 +240,9 @@ $(document).ready(function () {
             }
         )
     } 
+
+    function startLoading() {
+        $("#autocomplete").attr("disabled", "disabled");
+        $('.main-body').html("<div class='loading-logo'><img src='resources/img/logo.png/></div>")
+    }
 });

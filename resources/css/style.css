@@ -16,6 +16,40 @@ body {
     text-align: center;
 }
 
+/*LOADING SCREEN*/
+.loading-logo {
+    position: absolute;
+    width: 128px;
+    height: auto;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.loading-logo img {
+    position: relative;
+    height: 100%;
+    width: 100%;
+
+    animation: loading 2.5s infinite;
+}
+
+@keyframes loading {
+    5% {
+        transform: rotate(-15deg);
+        animation-timing-function: linear;
+    }
+    20% {
+        transform: rotate(-15deg);
+        animation-timing-function: cubic-bezier(.17,.67,.24,1);
+    } 70% {
+        transform: rotate(2520deg);
+        
+    } 100% {
+        transform: rotate(2520deg);
+    }
+}
+
 .no-review {
     position: absolute;
     opacity: 0.8;
@@ -90,6 +124,11 @@ input.searchbar {
 .search-form:hover .search-label,
 .searchbar:focus + .search-label {
     color: #000072 !important;
+}
+
+.searchbar:disabled {
+    background-color: rgb(185, 185, 185);
+    color: black;
 }
 
 .pac-container {
