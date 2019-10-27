@@ -1,11 +1,13 @@
 $(document).ready(function () {
     const searchInput = document.getElementById('autocomplete');
-
+    const loadingPhrases = ["Mining Cryptocurrency", "A Couple Bits Tried to Escape, but we Caught Them", "At Least we Didn't Leave you on Read", "Our Servers are Powered by a Lemon and Two Electrodes", "Testing your Patience", "Hitting a Sick Aerial", "Dreaming of Faster Computers", "Farming for XP"];
+    var resultSentiment;
+    var interval
     var options = {
         types: ["establishment"]
     };
     var autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'), options);
-    var result;
+
 
 
     // Listener outside to stop nested loop returning odd results
@@ -116,9 +118,10 @@ $(document).ready(function () {
         renderPage(reviewJson);
 
     }
-    
+
 
     function renderPage(locationData) {
+        clearInterval(interval);
         $("#autocomplete").removeAttr("disabled");
         console.log(locationData);
         if (locationData[0].hasOwnProperty("reviews")) {
@@ -126,7 +129,7 @@ $(document).ready(function () {
                 "<div class='body-header'><h1>" + locationData[0].title + "</h1>"
                 + "<h2>" + locationData[0].address + "</h2></div>" +
                 "<canvas id='review-chart'></canvas>" +
-                "<canvas id='ind-ratings-chart'></canvas>";
+                "<div class='my-card'><canvas id='ind-ratings-chart'></canvas></div>";
 
             $(".main-body").html(template);
 
@@ -206,19 +209,19 @@ $(document).ready(function () {
                     title: {
                         display: true,
                         text: "All ratings",
-                        fontColor: "white",
+                        fontColor: "#000072",
                         fontFamily: "Roboto",
                         fontSize: 18,
                     },
                     scales: {
                         xAxes: [{
-                            gridLines: { color: "white" },
-                            ticks: { fontSize: 18, fontColor: "white" },
+                            gridLines: { color: "#000072" },
+                            ticks: { fontSize: 18, fontColor: "#000072" },
                         }],
                         yAxes: [{
-                            gridLines: { color: "white" },
+                            gridLines: { color: "#000072" },
                             ticks: {
-                                fontSize: 18, fontColor: "white", beginAtZero: true, callback: function (value) { if (Number.isInteger(value)) { return value; } },
+                                fontSize: 18, fontColor: "#000072", beginAtZero: true, callback: function (value) { if (Number.isInteger(value)) { return value; } },
                                 stepSize: 1
                             },
                         }]
@@ -226,29 +229,38 @@ $(document).ready(function () {
                 }
             });
         } else {
-            $(".main-body").html("<div class='no-review main-body'><h1>It look like this business doesn't have any reviews yet.</h1>"+
-            "<h1>😞<h1></div>");
+            $(".main-body").html("<div class='no-review main-body'><h1>It look like this business doesn't have any reviews yet.</h1>" +
+                "<h1>😞<h1></div>");
         }
     }
 
     function postSentiment(dataJson) {
         $.ajax({
-            type : "POST",
-            url : "http://localhost:8000/reviewBot/sentiment",
-            datatype : "application/json",
+            type: "POST",
+            url: "http://localhost:8000/reviewBot/sentiment",
+            datatype: "application/json",
             contentType: "application/json",
             data: JSON.stringify(dataJson[0].reviews),
-            success : function(result) {
-                console.log(result);
+            success: function (result) {
+                sentimentGraph(result);
             },
-            error : function(error) {
-        
+            error: function (error) {
+
             },
         });
-    } 
+    }
 
     function startLoading() {
+        let message = loadingPhrases[Math.floor(Math.random() * loadingPhrases.length)];
+        $('.main-body').html("<div class='loading-logo'><img src='resources/img/logo.png'/></div><h2>" + message + "</h2>")
+        interval = setInterval(function () {
+            message = loadingPhrases[Math.floor(Math.random() * loadingPhrases.length)];
+            $('.main-body').html("<div class='loading-logo'><img src='resources/img/logo.png'/></div><h2>" + message + "</h2>")
+        }, 5000);
         $("#autocomplete").attr("disabled", "disabled");
-        $('.main-body').html("<div class='loading-logo'><img src='resources/img/logo.png/></div>")
+    }
+
+    function sentimentGraph(result) {
+
     }
 });
