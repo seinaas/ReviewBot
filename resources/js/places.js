@@ -72,7 +72,7 @@ $(document).ready(function () {
     });
 
     //SEND HTTP POST REQUEST TO RETRIEVE LOCATION DATA
-    const Url = "https://api.apify.com/v2/actor-tasks/YuuiNMbYsGgY8odbj/runs?token=75dppykcMPqQZa674rPTZfLRR&ui=1";
+    const Url = "YOUR API KEY HERE";
     async function retrieveData(address) {
         console.log(address);
         var myJson;
