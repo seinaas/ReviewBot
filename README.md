@@ -17,7 +17,16 @@ We used Google Places API in our program to collect reviews for businesses. Sinc
 
 
 ### Built with
-Ajax, apify, css, express.js, google-cloud, html, jquery, node.js, postman
+* [Ajax](https://api.jquery.com/category/ajax/) 
+* [Apify](https://apify.com/) 
+* [CSS](https://www.w3schools.com/css/) 
+* [Express.js](https://expressjs.com/) 
+* [Google-Cloud](https://cloud.google.com/) 
+* [HTML](https://www.w3schools.com/html/) 
+* [Jquery](https://www.w3schools.com/html/)
+* [Node.js](https://nodejs.org/en/) 
+* [postman](https://www.postman.com/) 
+
 
 ## Challenges we ran into
 The biggest challenge for building ReviewBot was retrieving the data for the feedback, which was mainly due to the limitations of the Google Places API.
