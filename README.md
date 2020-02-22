@@ -36,5 +36,6 @@ While working on ReviewBot, we had the opportunity to interact with both sponsor
 ## What's next for ReviewBot
 There are numerous ways that ReviewBot can be updated. Firstly, an upgrade in speed would vastly improve ReviewBot's functionality and performance. Secondly, although ReviewBot uses Google Review to gather the data for the feedback, the implementation of other social media platforms, such as Facebook or Twitter, would push ReviewBot to garner more feedback. Finally, allowing users to create a personal account for the web application would be worth working upon, as users would be able to save their searches onto their accounts, which would boost ReviewBot's reusability.
 
-</div>
+## Presentation
+[Google Slides](https://docs.google.com/presentation/d/1yONNkSyA6z9eiNi-8zRIP_ZpO5LqNRshQEc_ZmgsFU0/edit?usp=sharing)
 
